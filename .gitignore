@@ -33,3 +33,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#firebase
+.fangosolutions-17714-firebase-adminsdk-wo5rf-fe913a2022.json
+.firebase-config.ts

@@ -7,7 +7,7 @@ export class UserService {
   public async create() {
     const user = await this.prismaService.user.create({
       data: {
-        email: 'nilsgmail.com',
+        email: 'nils@gmail.com',
         userName: 'nils faelt',
       },
     });
