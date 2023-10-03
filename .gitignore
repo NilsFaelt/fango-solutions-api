@@ -37,3 +37,4 @@ lerna-debug.log*
 #firebase
 .fangosolutions-17714-firebase-adminsdk-wo5rf-fe913a2022.json
 .firebase-config.ts
+.env
