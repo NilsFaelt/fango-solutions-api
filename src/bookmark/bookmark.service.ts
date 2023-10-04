@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BookmarkDto, BookmarkDtoWithId } from './dto';
+import { take } from 'rxjs';
 
 @Injectable()
 export class BookmarkService {
@@ -21,8 +22,28 @@ export class BookmarkService {
     }
   }
 
-  public async get() {
-    console.log('test');
+  public async get({
+    email,
+    skip = 0,
+    limit = undefined,
+  }: {
+    email: string;
+    skip?: number;
+    limit?: number;
+  }) {
+    try {
+      const bookmarks = await this.prismaService.bookmark.findMany({
+        where: {
+          userEmail: email,
+        },
+        skip: skip,
+        take: limit ? limit : 10000,
+      });
+      return bookmarks;
+    } catch (err) {
+      console.log(err);
+      throw new Error('Couldnt get bookmarks');
+    }
   }
 
   public async delete() {

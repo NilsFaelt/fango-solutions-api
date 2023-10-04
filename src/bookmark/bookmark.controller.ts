@@ -4,7 +4,10 @@ import {
   Delete,
   Get,
   Injectable,
+  Param,
+  ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BookmarkService } from './bookmark.service';
@@ -26,8 +29,17 @@ export class BookmarkController {
     return this.bookmarkService.add(bookmarkDto);
   }
   @Get()
-  public async get() {
-    return this.bookmarkService.get();
+  public async get(
+    // @ImUser('email') email: string,
+    @Query('skip', ParseIntPipe) skip?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
+  ) {
+    console.log(limit, skip);
+    return this.bookmarkService.get({
+      email: 'nils@gmail.com',
+      skip,
+      limit,
+    });
   }
   @Delete()
   public async delete() {
