@@ -24,7 +24,7 @@ import { PreAuthMiddleware } from './auth/middleware/pre-auth.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer.apply(PreAuthMiddleware).forRoutes({
-      path: '*',
+      path: '/user',
       method: RequestMethod.ALL,
     });
   }

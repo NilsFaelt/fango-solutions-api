@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,25 +8,24 @@ datasource db {
 }
 
 model User {
-  id               String             @id @default(uuid())
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  deletedAt        DateTime?
-  email            String             @unique
-  userName         String
-  Bookmark         Bookmark[]
-  BookmarkChildren BookmarkChildren[]
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+  email     String     @unique
+  userName  String
+  bookmarks Bookmark[]
 }
 
 model Bookmark {
-  id               String             @id @default(uuid())
-  url              String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  deletedAt        DateTime?
-  userEmail        String
-  user             User               @relation(fields: [userEmail], references: [email])
-  BookmarkChildren BookmarkChildren[]
+  id        String             @id @default(uuid())
+  url       String
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  deletedAt DateTime?
+  user      User               @relation(fields: [userEmail], references: [email])
+  userEmail String
+  children  BookmarkChildren[]
 }
 
 model BookmarkChildren {
@@ -38,8 +34,6 @@ model BookmarkChildren {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
-  userEmail  String
-  user       User      @relation(fields: [userEmail], references: [email])
   bookmark   Bookmark  @relation(fields: [bookmarkId], references: [id])
   bookmarkId String
 }
