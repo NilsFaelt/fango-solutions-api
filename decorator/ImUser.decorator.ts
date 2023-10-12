@@ -6,7 +6,7 @@ export const ImUser = createParamDecorator(
     if (!data) {
       return request.user;
     }
-    console.log(request.user, ' imn decor');
+
     return request.user ? request.user[data] : null;
   },
 );

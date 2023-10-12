@@ -30,16 +30,18 @@ export class BookmarkController {
   }
   @Get()
   public async get(
-    // @ImUser('email') email: string,
+    @ImUser('email') email: string,
     @Query('skip', ParseIntPipe) skip?: number,
     @Query('limit', ParseIntPipe) limit?: number,
-  ) {
-    console.log(limit, skip);
-    return this.bookmarkService.get({
-      email: 'nils@gmail.com',
-      skip,
-      limit,
+    @Query('page', ParseIntPipe) page?: number,
+  ): Promise<any> {
+    console.log(email);
+    const bookmarks = await this.bookmarkService.get({
+      email: email,
+      // skip,
+      // limit,
     });
+    return bookmarks;
   }
   @Delete()
   public async delete() {

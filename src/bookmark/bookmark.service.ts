@@ -30,7 +30,7 @@ export class BookmarkService {
     email: string;
     skip?: number;
     limit?: number;
-  }) {
+  }): Promise<any> {
     try {
       const bookmarks = await this.prismaService.bookmark.findMany({
         where: {
@@ -39,6 +39,7 @@ export class BookmarkService {
         skip: skip,
         take: limit ? limit : 10000,
       });
+
       return bookmarks;
     } catch (err) {
       console.log(err);
