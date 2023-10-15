@@ -12,7 +12,7 @@ export class PreAuthMiddleware implements NestMiddleware {
   }
 
   use(req: Request, res: Response, next: () => void) {
-    const token = req.headers.authorization.split('Bearer ')[1]?.trim();
+    const token = req.headers.authorization?.split('Bearer ')[1]?.trim();
 
     if (token != null && token != '') {
       this.auth

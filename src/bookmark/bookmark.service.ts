@@ -7,12 +7,16 @@ import { take } from 'rxjs';
 export class BookmarkService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  public async add(bookmarkDto: BookmarkDto): Promise<BookmarkDtoWithId> {
+  public async add(data: {
+    email: string;
+    url: string;
+  }): Promise<BookmarkDtoWithId> {
+    console.log(data, ' in prisma');
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
-          url: bookmarkDto.url,
-          userEmail: bookmarkDto.userEmail,
+          url: data.url,
+          userEmail: data.email,
         },
       });
       const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
@@ -39,8 +43,11 @@ export class BookmarkService {
         skip: skip,
         take: limit ? limit : 10000,
       });
-
-      return bookmarks;
+      const filteredBookmarks = bookmarks?.map((bookmark) => {
+        const { deletedAt, updatedAt, ...rest } = bookmark;
+        return rest;
+      });
+      return filteredBookmarks;
     } catch (err) {
       console.log(err);
       throw new Error('Couldnt get bookmarks');

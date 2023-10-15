@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Injectable,
-  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -13,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { BookmarkService } from './bookmark.service';
 import { BookmarkDto, BookmarkDtoWithId } from './dto';
 import { ImUser } from 'decorator';
+import { BookmarkInterface } from './types';
 
 @Injectable()
 @Controller('bookmark')
@@ -24,9 +24,11 @@ export class BookmarkController {
 
   @Post()
   public async add(
-    @Body() bookmarkDto: BookmarkDto,
+    @Body('url') url: string,
+    @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
-    return this.bookmarkService.add(bookmarkDto);
+    console.log(url, email);
+    return this.bookmarkService.add({ email, url });
   }
   @Get()
   public async get(
@@ -34,7 +36,7 @@ export class BookmarkController {
     @Query('skip', ParseIntPipe) skip?: number,
     @Query('limit', ParseIntPipe) limit?: number,
     @Query('page', ParseIntPipe) page?: number,
-  ): Promise<any> {
+  ): Promise<BookmarkInterface> {
     console.log(email);
     const bookmarks = await this.bookmarkService.get({
       email: email,
