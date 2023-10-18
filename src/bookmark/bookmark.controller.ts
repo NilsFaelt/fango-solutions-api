@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Injectable,
   ParseIntPipe,
   Post,
@@ -27,9 +29,10 @@ export class BookmarkController {
     @Body('url') url: string,
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
-    console.log(url, email);
+    if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     return this.bookmarkService.add({ email, url });
   }
+
   @Get()
   public async get(
     @ImUser('email') email: string,
@@ -37,7 +40,7 @@ export class BookmarkController {
     @Query('limit', ParseIntPipe) limit?: number,
     @Query('page', ParseIntPipe) page?: number,
   ): Promise<BookmarkInterface> {
-    console.log(email);
+    if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     const bookmarks = await this.bookmarkService.get({
       email: email,
       // skip,
@@ -46,7 +49,10 @@ export class BookmarkController {
     return bookmarks;
   }
   @Delete()
-  public async delete() {
-    return this.bookmarkService.delete();
+  public async delete(@ImUser('email') email: string, @Body('id') id: string) {
+    console.log(email, id);
+    if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
+    if (!id) throw new HttpException('id not found', HttpStatus.NOT_FOUND);
+    return this.bookmarkService.delete(id, email);
   }
 }
