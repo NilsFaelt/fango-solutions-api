@@ -9,7 +9,7 @@ export class BookmarkService {
   public async add(data: {
     email: string;
     url: string;
-    data?: { urls: string[] };
+    childUrls: string[];
   }): Promise<BookmarkDtoWithId> {
     console.log(data, ' in prisma');
     try {
@@ -19,8 +19,8 @@ export class BookmarkService {
           userEmail: data.email,
         },
       });
-      if (data.data.urls[0]) {
-        await this.addChildUrls(bookmark.id, data.data);
+      if (data.childUrls[0]) {
+        await this.addChildUrls(bookmark.id, data.childUrls);
       }
       const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
       return rest;
@@ -29,9 +29,9 @@ export class BookmarkService {
     }
   }
 
-  public async addChildUrls(id: string, data: { urls: string[] }) {
+  public async addChildUrls(id: string, urls: string[]) {
     try {
-      const childCreatePromises = data.urls.map(async (url) => {
+      const childCreatePromises = urls.map(async (url) => {
         await this.prismaService.bookmarkChildren.create({
           data: {
             url,
@@ -41,9 +41,7 @@ export class BookmarkService {
       });
 
       const addedChildren = await Promise.all(childCreatePromises);
-      console.log(addedChildren, 'in service');
     } catch (err) {
-      console.log('couldnt add child urls');
       throw err;
     }
   }
@@ -65,6 +63,9 @@ export class BookmarkService {
             equals: null,
           },
         },
+        include: {
+          children: true,
+        },
         skip: skip,
         take: limit ? limit : 10000,
       });
@@ -72,6 +73,7 @@ export class BookmarkService {
         const { deletedAt, updatedAt, ...rest } = bookmark;
         return rest;
       });
+      console.log(bookmarks);
       return filteredBookmarks;
     } catch (err) {
       console.log(err);

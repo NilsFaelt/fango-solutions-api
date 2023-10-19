@@ -27,10 +27,12 @@ export class BookmarkController {
   @Post()
   public async add(
     @Body('url') url: string,
+    @Body('childUrls') childUrls: string[],
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
+    console.log(childUrls, ' in contreoller');
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
-    return this.bookmarkService.add({ email, url });
+    return this.bookmarkService.add({ email, url, childUrls });
   }
 
   @Get()
