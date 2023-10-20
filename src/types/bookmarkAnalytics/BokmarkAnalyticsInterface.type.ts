@@ -1,3 +1,7 @@
 export interface BokmarkAnalyticsInterface {
-  clicked: number;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  bookmarkId: string;
+  clickCount: number;
 }

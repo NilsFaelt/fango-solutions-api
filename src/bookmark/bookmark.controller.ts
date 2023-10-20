@@ -25,14 +25,14 @@ export class BookmarkController {
   ) {}
 
   @Post()
-  public async add(
+  public async create(
     @Body('url') url: string,
     @Body('childUrls') childUrls: string[],
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
     console.log(childUrls, ' in contreoller');
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
-    return this.bookmarkService.add({ email, url, childUrls });
+    return this.bookmarkService.create({ email, url, childUrls });
   }
 
   @Get()
@@ -41,7 +41,7 @@ export class BookmarkController {
     @Query('skip', ParseIntPipe) skip?: number,
     @Query('limit', ParseIntPipe) limit?: number,
     @Query('page', ParseIntPipe) page?: number,
-  ): Promise<BookmarkInterface> {
+  ): Promise<BookmarkInterface[]> {
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     const bookmarks = await this.bookmarkService.get({
       email: email,

@@ -26,6 +26,7 @@ model Bookmark {
   user      User               @relation(fields: [userEmail], references: [email])
   userEmail String
   children  BookmarkChildren[]
+  Click     Click[]
 }
 
 model BookmarkChildren {
@@ -36,4 +37,13 @@ model BookmarkChildren {
   deletedAt  DateTime?
   bookmark   Bookmark  @relation(fields: [bookmarkId], references: [id])
   bookmarkId String
+}
+
+model Click {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  bookmark   Bookmark @relation(fields: [bookmarkId], references: [id])
+  bookmarkId String   @unique
+  clickCount Int      @default(0)
 }

@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BookmarkDto, BookmarkDtoWithId } from './dto';
+import { ClickService } from 'src/click/click.service';
+import { BookmarkInterface } from './types';
 
 @Injectable()
 export class BookmarkService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly clickService: ClickService,
+  ) {}
 
-  public async add(data: {
+  public async create(data: {
     email: string;
     url: string;
     childUrls: string[];
   }): Promise<BookmarkDtoWithId> {
-    console.log(data, ' in prisma');
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
@@ -19,6 +23,7 @@ export class BookmarkService {
           userEmail: data.email,
         },
       });
+      await this.clickService.create(bookmark.id);
       if (data.childUrls[0]) {
         await this.addChildUrls(bookmark.id, data.childUrls);
       }
@@ -54,7 +59,7 @@ export class BookmarkService {
     email: string;
     skip?: number;
     limit?: number;
-  }): Promise<any> {
+  }): Promise<BookmarkInterface[]> {
     try {
       const bookmarks = await this.prismaService.bookmark.findMany({
         where: {
@@ -66,14 +71,16 @@ export class BookmarkService {
         include: {
           children: true,
         },
+
         skip: skip,
         take: limit ? limit : 10000,
       });
+      // fix click namening and filtering, fix so its not a array
       const filteredBookmarks = bookmarks?.map((bookmark) => {
         const { deletedAt, updatedAt, ...rest } = bookmark;
-        return rest;
+        return { ...rest };
       });
-      console.log(bookmarks);
+
       return filteredBookmarks;
     } catch (err) {
       console.log(err);
