@@ -4,16 +4,24 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
-  public async create() {
-    const user = await this.prismaService.user.create({
-      data: {
-        email: 'nils@gmail.com',
-        userName: 'nils faelt',
+
+  public async create(email: string) {
+    const existingUser = await this.prismaService.user.findUnique({
+      where: {
+        email: email,
       },
     });
-    return user;
+
+    if (existingUser) {
+      console.log('Welcome');
+      return existingUser;
+    }
+
+    const createdUser = await this.prismaService.user.create({
+      data: {
+        email: email,
+      },
+    });
+    return createdUser;
   }
-  xxwxw;
-  //   public async get() {}
-  //   public async delete() {}
 }

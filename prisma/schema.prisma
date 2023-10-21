@@ -13,7 +13,6 @@ model User {
   updatedAt DateTime   @updatedAt
   deletedAt DateTime?
   email     String     @unique
-  userName  String
   bookmarks Bookmark[]
 }
 

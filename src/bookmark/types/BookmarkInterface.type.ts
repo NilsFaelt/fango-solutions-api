@@ -9,7 +9,7 @@ export interface BookmarkInterface {
     deletedAt: Date;
     bookmarkId: string;
   }[];
-  Click?: BokmarkAnalyticsInterface[];
+  analytics: BokmarkAnalyticsInterface;
   pagination?: PaginationInterface;
   id: string;
   url: string;

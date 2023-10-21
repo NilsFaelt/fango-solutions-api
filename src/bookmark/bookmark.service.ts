@@ -70,6 +70,7 @@ export class BookmarkService {
         },
         include: {
           children: true,
+          Click: true,
         },
 
         skip: skip,
@@ -77,11 +78,15 @@ export class BookmarkService {
       });
       // fix click namening and filtering, fix so its not a array
       const filteredBookmarks = bookmarks?.map((bookmark) => {
-        const { deletedAt, updatedAt, ...rest } = bookmark;
-        return { ...rest };
+        const click = bookmark.Click[0];
+
+        const { deletedAt, updatedAt, Click, ...rest } = bookmark;
+        return { ...rest, analytics: { click } };
       });
 
-      return filteredBookmarks;
+      const sortedBookmarks = this.sort(filteredBookmarks);
+
+      return sortedBookmarks;
     } catch (err) {
       console.log(err);
       throw new Error('Couldnt get bookmarks');
@@ -104,10 +109,24 @@ export class BookmarkService {
           id: id,
         },
       });
-      console.log(deletedBookmark);
+
       if (deletedBookmark) return { message: 'bookmark succesfully deletd' };
     } else {
       console.error('Invalid request. Email does not match.');
     }
+  }
+
+  private sort(bookmarks: BookmarkInterface[]) {
+    const sortedBookmarks = bookmarks?.sort((a, b) => {
+      const clicksA =
+        (a.analytics?.click?.clickCount || 0) +
+        (a.analytics.click?.clickCount || 0);
+      const clicksB =
+        (b.analytics?.click?.clickCount || 0) +
+        (b.analytics.click?.clickCount || 0);
+
+      return clicksB - clicksA;
+    });
+    return sortedBookmarks;
   }
 }

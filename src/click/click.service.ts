@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ClickInterface } from './types';
 
 @Injectable()
 export class ClickService {
@@ -31,6 +32,18 @@ export class ClickService {
       return { message: 'analytics added' };
     } catch (err) {
       console.log('couldnt add click');
+    }
+  }
+  public async get(bookmarkId: string): Promise<ClickInterface> {
+    try {
+      const click = await this.prismaService.click.findUnique({
+        where: {
+          bookmarkId: bookmarkId,
+        },
+      });
+      return click;
+    } catch (err) {
+      console.log('could npt find click');
     }
   }
 }
