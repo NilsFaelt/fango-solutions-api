@@ -38,14 +38,13 @@ export class BookmarkController {
   public async get(
     @ImUser('email') email: string,
     @Query('skip', ParseIntPipe) skip?: number,
-    @Query('limit', ParseIntPipe) limit?: number,
-    @Query('page', ParseIntPipe) page?: number,
+    @Query('limit', ParseIntPipe) limit?: number | null,
   ): Promise<BookmarkInterface[]> {
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     const bookmarks = await this.bookmarkService.get({
       email: email,
-      // skip,
-      // limit,
+      skip,
+      limit,
     });
     return bookmarks;
   }

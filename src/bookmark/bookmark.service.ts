@@ -54,13 +54,14 @@ export class BookmarkService {
   public async get({
     email,
     skip = 0,
-    limit = undefined,
+    limit = 100,
   }: {
     email: string;
     skip?: number;
     limit?: number;
   }): Promise<BookmarkInterface[]> {
     try {
+      const takeAll = limit === null;
       const bookmarks = await this.prismaService.bookmark.findMany({
         where: {
           userEmail: email,
@@ -74,7 +75,7 @@ export class BookmarkService {
         },
 
         skip: skip,
-        take: limit ? limit : 10000,
+        take: limit,
       });
       // fix click namening and filtering, fix so its not a array
       const filteredBookmarks = bookmarks?.map((bookmark) => {
