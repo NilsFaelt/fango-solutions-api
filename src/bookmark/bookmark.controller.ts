@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -47,6 +48,18 @@ export class BookmarkController {
       limit,
     });
     return bookmarks;
+  }
+  @Get('/:id')
+  public async getById(
+    @ImUser('email') email: string,
+    @Param('id') id: string,
+  ): Promise<BookmarkInterface> {
+    console.log(id, email, 'in getbyid');
+    if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
+    return this.bookmarkService.getById({
+      email: email,
+      id: id,
+    });
   }
   @Delete()
   public async delete(@ImUser('email') email: string, @Body('id') id: string) {

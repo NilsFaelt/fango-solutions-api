@@ -93,6 +93,33 @@ export class BookmarkService {
       throw new Error('Couldnt get bookmarks');
     }
   }
+  public async getById({
+    email,
+    id,
+  }: {
+    email: string;
+    id: string;
+  }): Promise<BookmarkInterface> {
+    try {
+      const bookmark = await this.prismaService.bookmark.findUnique({
+        where: {
+          userEmail: email,
+          id: id,
+          deletedAt: {
+            equals: null,
+          },
+        },
+        include: {
+          children: true,
+        },
+      });
+
+      return bookmark;
+    } catch (err) {
+      console.log(err);
+      throw new Error('Couldnt get bookmark');
+    }
+  }
 
   public async delete(id: string, emailFromToken: string) {
     const bookmark = await this.prismaService.bookmark.findUnique({
