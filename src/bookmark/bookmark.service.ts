@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { BookmarkDto, BookmarkDtoWithId } from './dto';
+import { BookmarkDtoWithId } from './dto';
 import { ClickService } from 'src/click/click.service';
 import { BookmarkInterface } from './types';
 

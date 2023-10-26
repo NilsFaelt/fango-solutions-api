@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { FirebaseService } from './firebase/firebase.service';
 import { PreAuthMiddleware } from './auth/middleware/pre-auth.middleware';
 import { ClickModule } from './click/click.module';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ClickModule } from './click/click.module';
     PrismaModule,
     UserModule,
     ClickModule,
+    ContentModule,
   ],
   controllers: [],
   providers: [FirebaseService],

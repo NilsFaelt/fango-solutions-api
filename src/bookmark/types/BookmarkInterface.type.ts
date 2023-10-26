@@ -1,3 +1,4 @@
+import { ContentInterface } from 'src/content';
 import { PaginationInterface, BokmarkAnalyticsInterface } from 'src/types';
 
 export interface BookmarkInterface {
@@ -11,6 +12,7 @@ export interface BookmarkInterface {
   }[];
   analytics?: BokmarkAnalyticsInterface;
   pagination?: PaginationInterface;
+  content?: ContentInterface[];
   id: string;
   url: string;
   createdAt: Date;

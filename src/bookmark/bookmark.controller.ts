@@ -54,7 +54,6 @@ export class BookmarkController {
     @ImUser('email') email: string,
     @Param('id') id: string,
   ): Promise<BookmarkInterface> {
-    console.log(id, email, 'in getbyid');
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     return this.bookmarkService.getById({
       email: email,
