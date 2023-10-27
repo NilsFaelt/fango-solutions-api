@@ -85,8 +85,8 @@ export class BookmarkService {
       const filteredBookmarks = bookmarks?.map((bookmark) => {
         const click = bookmark.Click[0];
 
-        const { deletedAt, updatedAt, Click, ...rest } = bookmark;
-        return { ...rest, analytics: { click } };
+        const { deletedAt, updatedAt, Click, Content, ...rest } = bookmark;
+        return { ...rest, analytics: { click }, content: Content };
       });
 
       const sortedBookmarks = this.sort(filteredBookmarks);
@@ -118,8 +118,8 @@ export class BookmarkService {
           Content: true,
         },
       });
-
-      return bookmark;
+      const content = bookmark.Content;
+      return { ...bookmark, content };
     } catch (err) {
       console.log(err);
       throw new Error('Couldnt get bookmark');
