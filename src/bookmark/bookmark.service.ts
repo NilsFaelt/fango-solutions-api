@@ -3,12 +3,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { BookmarkDtoWithId } from './dto';
 import { ClickService } from 'src/click/click.service';
 import { BookmarkInterface } from './types';
+import { ContentService } from 'src/content/content.service';
 
 @Injectable()
 export class BookmarkService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly clickService: ClickService,
+    private readonly contentService: ContentService,
   ) {}
 
   public async create(data: {
@@ -72,11 +74,13 @@ export class BookmarkService {
         include: {
           children: true,
           Click: true,
+          Content: true,
         },
 
         skip: skip,
         take: limit,
       });
+
       // fix click namening and filtering, fix so its not a array
       const filteredBookmarks = bookmarks?.map((bookmark) => {
         const click = bookmark.Click[0];
@@ -111,6 +115,7 @@ export class BookmarkService {
         },
         include: {
           children: true,
+          Content: true,
         },
       });
 

@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ContentService } from './content.service';
 import { ImUser } from 'decorator';
@@ -27,15 +28,16 @@ export class ContentController {
     if (!email) throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
     return this.contentService.create(email, bookmarkId, data);
   }
-  @Get('/:bookmarkId')
+  @Get()
   public async get(
     @ImUser('email') email,
-    @Param('bookmarkId') bookmarkId: string,
+    @Query('bookmarkId') bookmarkId: string,
   ): Promise<ContentInterface[]> {
+    console.log(bookmarkId, ' in get ');
     if (!email) throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
     return this.contentService.get(email, bookmarkId);
   }
-  @Get('/single/:id')
+  @Get('/:id')
   public async getbyId(
     @ImUser('email') email,
     @Param('id') id: string,
@@ -46,7 +48,7 @@ export class ContentController {
   }
   @Delete('/:id')
   //changed param to body
-  public async delete(@ImUser('email') email, @Param('id') id: string) {
+  public async delete(@ImUser('email') email, @Body('id') id: string) {
     if (!email) throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
     return this.contentService.delete(email, id);
   }
@@ -55,7 +57,7 @@ export class ContentController {
     @ImUser('email') email,
     @Param('id') id: string,
     @Body('data') data: ContentInterface,
-  ) {
+  ): Promise<ContentInterface> {
     console.log(id, email, data, ' in patch');
     if (!email || !id)
       throw new HttpException('access denied ', HttpStatus.FORBIDDEN);

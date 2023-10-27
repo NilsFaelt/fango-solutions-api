@@ -8,4 +8,5 @@ export interface ContentInterface {
   title: string;
   text: string;
   todo?: boolean;
+  done?: boolean;
 }

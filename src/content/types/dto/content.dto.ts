@@ -10,4 +10,6 @@ export class ContentDto {
   text: string;
   @IsBoolean()
   todo?: boolean;
+  @IsBoolean()
+  done?: boolean;
 }

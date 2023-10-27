@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   providers: [ContentService],
   controllers: [ContentController],
   imports: [PrismaModule],
+  exports: [ContentService],
 })
 export class ContentModule {}

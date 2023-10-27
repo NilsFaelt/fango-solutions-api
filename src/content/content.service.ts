@@ -13,11 +13,12 @@ export class ContentService {
       title: string;
       text: string;
       todo?: boolean;
+      done?: boolean;
     },
   ): Promise<{ message: string; status: number }> {
-    console.log(' in prisma', data);
     try {
       const todo = data.todo ? data.todo : false;
+      const done = data.done ? data.done : false;
       await this.prismaService.content.create({
         data: {
           bookmarkId: bookmarkId,
@@ -25,6 +26,7 @@ export class ContentService {
           title: data.title,
           text: data.text,
           todo: todo,
+          done: done,
         },
       });
       return { message: 'Content created', status: HttpStatus.CREATED };
@@ -53,7 +55,6 @@ export class ContentService {
     }
   }
   public async getByID(email: string, id: string): Promise<ContentInterface> {
-    console.log(email, id, ' in prisma');
     try {
       return this.prismaService.content.findUnique({
         where: {
@@ -93,6 +94,7 @@ export class ContentService {
   public async update(email: string, id: string, data: ContentInterface) {
     try {
       const todo = data.todo ? data.todo : false;
+      const done = data.done ? data.done : false;
       const content = await this.prismaService.content.update({
         where: { id: id, userEmail: email },
         data: {
@@ -100,6 +102,7 @@ export class ContentService {
           title: data.title,
           text: data.text,
           todo: todo,
+          done: done,
         },
       });
       if (!content) {
