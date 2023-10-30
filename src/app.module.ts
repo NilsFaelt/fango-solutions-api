@@ -12,6 +12,7 @@ import { FirebaseService } from './firebase/firebase.service';
 import { PreAuthMiddleware } from './auth/middleware/pre-auth.middleware';
 import { ClickModule } from './click/click.module';
 import { ContentModule } from './content/content.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ContentModule } from './content/content.module';
     UserModule,
     ClickModule,
     ContentModule,
+    AnalyticsModule,
   ],
   controllers: [],
   providers: [FirebaseService],

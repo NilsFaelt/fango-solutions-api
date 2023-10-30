@@ -13,6 +13,10 @@ export class UserController {
   public async get(@ImUser('email') user) {
     return { name: user };
   }
-  //   public async get() {}
-  //   public async delete() {}
+  @Get('/count')
+  public async getCount(
+    @ImUser('email') email,
+  ): Promise<{ users: { total: number } }> {
+    return this.userService.getCount(email);
+  }
 }

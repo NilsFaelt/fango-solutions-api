@@ -24,4 +24,12 @@ export class UserService {
     });
     return createdUser;
   }
+  public async getCount(email: string) {
+    try {
+      const userCount = await this.prismaService.user.count();
+      return { users: { total: userCount } };
+    } catch (error) {
+      throw new Error('An error occurred while getting user count: ');
+    }
+  }
 }

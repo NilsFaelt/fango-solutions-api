@@ -8,7 +8,7 @@ import { ContentModule } from 'src/content/content.module';
 @Module({
   controllers: [BookmarkController],
   providers: [BookmarkService],
-  exports: [],
+  exports: [BookmarkService],
   imports: [PrismaModule, ClickModule, ContentModule],
 })
 export class BookmarkModule {}
