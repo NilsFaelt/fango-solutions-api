@@ -148,6 +148,28 @@ export class BookmarkService {
       console.error('Invalid request. Email does not match.');
     }
   }
+  public async generateDefault(email: string): Promise<BookmarkDtoWithId[]> {
+    try {
+      const createdBookmarks: BookmarkDtoWithId[] = [];
+      const bookmarks: string[] = this.bookmarkData.bookmarks;
+      for (const url of bookmarks) {
+        const bookmark = await this.prismaService.bookmark.create({
+          data: {
+            url: url,
+            userEmail: email,
+          },
+        });
+
+        await this.clickService.create(bookmark.id);
+
+        createdBookmarks.push(bookmark);
+      }
+
+      return createdBookmarks;
+    } catch (err) {
+      throw new Error('Failed to add bookmarks');
+    }
+  }
 
   private sort(bookmarks: BookmarkInterface[]) {
     const sortedBookmarks = bookmarks?.sort((a, b) => {
@@ -162,4 +184,16 @@ export class BookmarkService {
     });
     return sortedBookmarks;
   }
+
+  private bookmarkData = {
+    bookmarks: [
+      'https://www.youtube.com',
+      'https://www.facebook.com',
+      'https://mail.google.com/',
+      'https://www.google.com',
+      'https://www.netflix.com',
+      'https://www.hbomax.com',
+      'https://www.linkedin.com/feed',
+    ],
+  };
 }

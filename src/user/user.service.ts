@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { BookmarkService } from 'src/bookmark/bookmark.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly bookmarkService: BookmarkService,
+  ) {}
 
   public async create(email: string) {
     const existingUser = await this.prismaService.user.findUnique({
@@ -22,6 +26,7 @@ export class UserService {
         email: email,
       },
     });
+    await this.bookmarkService.generateDefault(createdUser.email);
     return createdUser;
   }
   public async getCount(email: string) {
