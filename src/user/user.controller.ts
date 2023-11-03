@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ImUser } from 'decorator';
 
@@ -12,6 +12,10 @@ export class UserController {
   @Get()
   public async get(@ImUser('email') user) {
     return { name: user };
+  }
+  @Delete()
+  public async delete(@ImUser('email') email) {
+    return this.userService.delete(email);
   }
   @Get('/count')
   public async getCount(

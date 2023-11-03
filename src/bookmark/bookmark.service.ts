@@ -134,20 +134,45 @@ export class BookmarkService {
     });
 
     if (bookmark && bookmark.userEmail === emailFromToken) {
-      const deletedBookmark = await this.prismaService.bookmark.update({
-        data: {
-          deletedAt: new Date(),
-        },
-        where: {
-          id: id,
-        },
-      });
+      try {
+        const deletedClicks = await this.prismaService.click.deleteMany({
+          where: {
+            bookmarkId: bookmark.id,
+          },
+        });
 
-      if (deletedBookmark) return { message: 'bookmark succesfully deletd' };
+        const deletedContent = await this.prismaService.content.deleteMany({
+          where: {
+            bookmarkId: id,
+          },
+        });
+
+        const deletedBookmarkChildren =
+          await this.prismaService.bookmarkChildren.deleteMany({
+            where: {
+              bookmarkId: id,
+            },
+          });
+
+        const deletedBookmark = await this.prismaService.bookmark.delete({
+          where: {
+            id: id,
+          },
+        });
+
+        if (deletedBookmark) {
+          return { message: 'Bookmark successfully deleted' };
+        } else {
+          console.error('Bookmark could not be deleted.');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
     } else {
       console.error('Invalid request. Email does not match.');
     }
   }
+
   public async generateDefault(email: string): Promise<BookmarkDtoWithId[]> {
     try {
       const createdBookmarks: BookmarkDtoWithId[] = [];

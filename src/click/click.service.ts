@@ -17,6 +17,7 @@ export class ClickService {
     }
   }
   public async increment(bookmarkId: string) {
+    console.log(bookmarkId, ' in service');
     try {
       const analytics = await this.prismaService.click.update({
         data: {
