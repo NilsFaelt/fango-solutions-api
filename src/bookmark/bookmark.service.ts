@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BookmarkDtoWithId } from './dto';
 import { ClickService } from 'src/click/click.service';
-import { BookmarkInterface } from './types';
+import { BookmarkInterface, ChildUrlsInterFace } from './types';
 import { ContentService } from 'src/content/content.service';
 
 @Injectable()
@@ -36,6 +36,35 @@ export class BookmarkService {
     }
   }
 
+  public async patch(data: {
+    email: string;
+    id: string;
+    url: string;
+    childUrls: ChildUrlsInterFace[];
+  }): Promise<BookmarkDtoWithId> {
+    try {
+      const bookmark = await this.prismaService.bookmark.update({
+        where: {
+          userEmail: data.email,
+          id: data.id,
+        },
+        data: {
+          url: data.url,
+          userEmail: data.email,
+        },
+      });
+      await this.clickService.create(bookmark.id);
+      if (data.childUrls[0]) {
+        await this.patchChildUrls(bookmark.id, data.childUrls);
+      }
+      const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
+      console.log(rest, ' in patch');
+      return rest;
+    } catch (err) {
+      throw new Error('Failed to add bookmark');
+    }
+  }
+
   public async addChildUrls(id: string, urls: string[]) {
     try {
       const childCreatePromises = urls.map(async (url) => {
@@ -50,6 +79,30 @@ export class BookmarkService {
       const addedChildren = await Promise.all(childCreatePromises);
     } catch (err) {
       throw err;
+    }
+  }
+  public async patchChildUrls(
+    id: string,
+    data: ChildUrlsInterFace[] | undefined,
+  ) {
+    try {
+      if (data && data.length > 0) {
+        const childCreatePromises = data.map(async (child) => {
+          await this.prismaService.bookmarkChildren.update({
+            where: {
+              id: child.id,
+            },
+            data: {
+              url: child.url,
+            },
+          });
+        });
+        // Use Promise.all to await all create operations
+        await Promise.all(childCreatePromises);
+      }
+    } catch (error) {
+      // Handle errors here
+      console.error('Error patching child URLs:', error);
     }
   }
 
@@ -214,7 +267,7 @@ export class BookmarkService {
     bookmarks: [
       'https://www.youtube.com',
       'https://www.facebook.com',
-      'https://mail.google.com/',
+      'https://mail.google.com',
       'https://www.google.com',
       'https://www.netflix.com',
       'https://www.hbomax.com',

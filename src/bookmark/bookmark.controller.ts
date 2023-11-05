@@ -8,6 +8,7 @@ import {
   Injectable,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -15,7 +16,7 @@ import { ConfigService } from '@nestjs/config';
 import { BookmarkService } from './bookmark.service';
 import { BookmarkDto, BookmarkDtoWithId } from './dto';
 import { ImUser } from 'decorator';
-import { BookmarkInterface } from './types';
+import { BookmarkInterface, ChildUrlsInterFace } from './types';
 
 @Injectable()
 @Controller('bookmark')
@@ -33,6 +34,17 @@ export class BookmarkController {
   ): Promise<BookmarkDtoWithId> {
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     return this.bookmarkService.create({ email, url, childUrls });
+  }
+  @Patch()
+  public async patch(
+    @Body('url') url: string,
+    @Body('childUrls') childUrls: ChildUrlsInterFace[],
+    @Body('id') id: string,
+    @ImUser('email') email,
+  ): Promise<BookmarkDtoWithId> {
+    console.log(id, url, childUrls, email);
+    if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
+    return this.bookmarkService.patch({ email, id, url, childUrls });
   }
 
   @Get()

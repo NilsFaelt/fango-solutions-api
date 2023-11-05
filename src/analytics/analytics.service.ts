@@ -11,6 +11,7 @@ export class AnalyticsService {
   ) {}
   public async get(email: string): Promise<AnalyticsInterface> {
     const bookmarks = await this.bookmarkService.get({ email });
+
     let totalTodos = 0;
     let totalTodosDone = 0;
     let totalContent = 0;

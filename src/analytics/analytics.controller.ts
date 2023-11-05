@@ -10,6 +10,6 @@ export class AnalyticsController {
   public async get(
     @ImUser('email') email: string,
   ): Promise<AnalyticsInterface> {
-    return this.analyticsService.get(email);
+    return await this.analyticsService.get(email);
   }
 }
