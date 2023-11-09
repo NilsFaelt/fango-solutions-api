@@ -10,7 +10,7 @@ export class UserService {
   ) {}
 
   public async create(email: string) {
-    const existingUser = await this.prismaService.user.findUnique({
+    const existingUser = await this.prismaService.user.findFirst({
       where: {
         email: email,
       },
