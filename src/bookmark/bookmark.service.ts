@@ -40,7 +40,8 @@ export class BookmarkService {
     email: string;
     id: string;
     url: string;
-    childUrls: ChildUrlsInterFace[];
+    childUrls?: ChildUrlsInterFace[];
+    childUrlsNew?: string[];
   }): Promise<BookmarkDtoWithId> {
     try {
       const bookmark = await this.prismaService.bookmark.update({
@@ -56,6 +57,9 @@ export class BookmarkService {
       await this.clickService.create(bookmark.id);
       if (data.childUrls[0]) {
         await this.patchChildUrls(bookmark.id, data.childUrls);
+      }
+      if (data.childUrlsNew[0]) {
+        await this.addChildUrls(bookmark.id, data.childUrlsNew);
       }
       const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
       console.log(rest, ' in patch');

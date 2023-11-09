@@ -39,12 +39,20 @@ export class BookmarkController {
   public async patch(
     @Body('url') url: string,
     @Body('childUrls') childUrls: ChildUrlsInterFace[],
+    @Body('childUrlsNew') childUrlsNew: string[],
     @Body('id') id: string,
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
-    console.log(id, url, childUrls, email);
+    console.log(childUrls, childUrlsNew, ' in contreoller');
+
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
-    return this.bookmarkService.patch({ email, id, url, childUrls });
+    return this.bookmarkService.patch({
+      email,
+      id,
+      url,
+      childUrls,
+      childUrlsNew,
+    });
   }
 
   @Get()
