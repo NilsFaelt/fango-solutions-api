@@ -29,9 +29,9 @@ import { AnalyticsModule } from './analytics/analytics.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(PreAuthMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
+    // consumer.apply(PreAuthMiddleware).forRoutes({
+    //   path: '*',
+    //   method: RequestMethod.ALL,
+    // });
   }
 }
