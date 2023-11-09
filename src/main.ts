@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  console.log(process.env.NODE_ENV, ' in main');
   if (process.env.NODE_ENV === 'development') {
     app.enableCors({ origin: '*' });
   } else {
