@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BookmarkService } from './bookmark.service';
-import { BookmarkDto, BookmarkDtoWithId } from './dto';
+import { BookmarkDtoWithId } from './dto';
 import { ImUser } from 'decorator';
 import { BookmarkInterface, ChildUrlsInterFace } from './types';
 
@@ -61,6 +61,7 @@ export class BookmarkController {
     @Query('skip', ParseIntPipe) skip?: number,
     @Query('limit', ParseIntPipe) limit?: number | null,
   ): Promise<BookmarkInterface[]> {
+    console.log(process.env.NODE_ENV, ' in main');
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     const bookmarks = await this.bookmarkService.get({
       email: email,
