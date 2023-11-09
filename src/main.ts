@@ -1,16 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { execSync } from 'child_process';
-//
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   if (process.env.NODE_ENV === 'development') {
     app.enableCors({ origin: '*' });
   } else {
-    execSync(
-      'npm install && npx prisma migrate save --name init && npx prisma migrate up && npm start ',
-    );
     app.enableCors({
       origin: 'https://fangosolutions.com',
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
