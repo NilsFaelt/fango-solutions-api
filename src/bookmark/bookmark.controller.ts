@@ -82,6 +82,7 @@ export class BookmarkController {
   }
   @Delete()
   public async delete(@ImUser('email') email: string, @Body('id') id: string) {
+    console.log(email, id);
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     if (!id) throw new HttpException('id not found', HttpStatus.NOT_FOUND);
     return this.bookmarkService.delete(id, email);
