@@ -19,20 +19,20 @@ export class BookmarkService {
     childUrls: string[];
     alias?: string;
   }): Promise<BookmarkDtoWithId> {
-    const alias = data.alias ? data.alias : null;
+    const aliasInput = data.alias ? data.alias : null;
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
           url: data.url,
           userEmail: data.email,
-          alias: alias,
+          alias: aliasInput,
         },
       });
       await this.clickService.create(bookmark.id);
       if (data.childUrls[0]) {
         await this.addChildUrls(bookmark.id, data.childUrls);
       }
-      const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
+      const { deletedAt, createdAt, updatedAt, alias, ...rest } = bookmark;
       return rest;
     } catch (err) {
       throw new Error('Failed to add bookmark');
