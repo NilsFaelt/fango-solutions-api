@@ -4,7 +4,7 @@ import { PaginationInterface, BokmarkAnalyticsInterface } from 'src/types';
 export interface BookmarkInterface {
   id: string;
   url: string;
-  alias?: string | null;
+  alias: string;
   createdAt: Date;
   userEmail: string;
   children?: ChildInterface[];

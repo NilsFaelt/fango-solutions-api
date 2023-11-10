@@ -19,7 +19,7 @@ export class BookmarkService {
     childUrls: string[];
     alias?: string;
   }): Promise<BookmarkDtoWithId> {
-    const aliasInput = data.alias ? data.alias : null;
+    const aliasInput = data.alias ? data.alias : '';
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
@@ -45,8 +45,10 @@ export class BookmarkService {
     url: string;
     childUrls?: ChildUrlsInterFace[];
     childUrlsNew?: string[];
+    alias?: string;
   }): Promise<BookmarkDtoWithId> {
     try {
+      const aliasInput = data.alias ? data.alias : '';
       const bookmark = await this.prismaService.bookmark.update({
         where: {
           userEmail: data.email,
@@ -55,6 +57,7 @@ export class BookmarkService {
         data: {
           url: data.url,
           userEmail: data.email,
+          alias: aliasInput,
         },
       });
       await this.clickService.create(bookmark.id);
