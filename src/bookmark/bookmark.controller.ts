@@ -30,10 +30,12 @@ export class BookmarkController {
   public async create(
     @Body('url') url: string,
     @Body('childUrls') childUrls: string[],
+    @Body('alias') alias: string,
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
+    console.log(alias);
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
-    return this.bookmarkService.create({ email, url, childUrls });
+    return this.bookmarkService.create({ email, url, childUrls, alias });
   }
   @Patch()
   public async patch(

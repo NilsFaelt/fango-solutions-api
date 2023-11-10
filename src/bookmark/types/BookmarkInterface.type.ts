@@ -15,6 +15,7 @@ export interface BookmarkInterface {
   content?: ContentInterface[];
   id: string;
   url: string;
+  alias: string | null;
   createdAt: Date;
   userEmail: string;
 }

@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   if (process.env.NODE_ENV === 'development') {
-    app.enableCors({ origin: '*' });
+    app.enableCors({
+      origin: '*',
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+      preflightContinue: false,
+    });
   } else {
     app.enableCors({
       origin: 'https://fangosolutions.com',

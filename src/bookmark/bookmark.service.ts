@@ -17,12 +17,15 @@ export class BookmarkService {
     email: string;
     url: string;
     childUrls: string[];
+    alias?: string;
   }): Promise<BookmarkDtoWithId> {
+    const alias = data.alias ? data.alias : null;
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
           url: data.url,
           userEmail: data.email,
+          alias: alias,
         },
       });
       await this.clickService.create(bookmark.id);
