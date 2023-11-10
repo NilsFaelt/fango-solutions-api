@@ -45,10 +45,8 @@ export class BookmarkService {
     url: string;
     childUrls?: ChildUrlsInterFace[];
     childUrlsNew?: string[];
-    alias?: string;
   }): Promise<BookmarkDtoWithId> {
     try {
-      const aliasInput = data.alias ? data.alias : '';
       const bookmark = await this.prismaService.bookmark.update({
         where: {
           userEmail: data.email,
@@ -57,7 +55,6 @@ export class BookmarkService {
         data: {
           url: data.url,
           userEmail: data.email,
-          alias: aliasInput,
         },
       });
       await this.clickService.create(bookmark.id);
@@ -68,7 +65,7 @@ export class BookmarkService {
         await this.addChildUrls(bookmark.id, data.childUrlsNew);
       }
       const { deletedAt, createdAt, updatedAt, alias, ...rest } = bookmark;
-      console.log(rest, ' in patch');
+
       return rest;
     } catch (err) {
       throw new Error('Failed to add bookmark');
@@ -245,6 +242,7 @@ export class BookmarkService {
           data: {
             url: url,
             userEmail: email,
+            alias: '',
           },
         });
 
