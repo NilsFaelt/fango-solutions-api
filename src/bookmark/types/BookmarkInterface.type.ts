@@ -14,6 +14,9 @@ export interface BookmarkInterface {
   analytics?: BokmarkAnalyticsInterface;
   pagination?: PaginationInterface;
   content?: ContentInterface[];
-
+  userEmail: string;
+  id: string;
+  url: string;
+  alias: string;
   createdAt: Date;
 }
