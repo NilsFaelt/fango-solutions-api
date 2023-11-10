@@ -33,7 +33,6 @@ export class BookmarkController {
     @Body('alias') alias: string,
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
-    console.log(alias);
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     return this.bookmarkService.create({ email, url, childUrls, alias });
   }
@@ -45,8 +44,6 @@ export class BookmarkController {
     @Body('id') id: string,
     @ImUser('email') email,
   ): Promise<BookmarkDtoWithId> {
-    console.log(childUrls, childUrlsNew, ' in contreoller');
-
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     return this.bookmarkService.patch({
       email,
@@ -72,6 +69,7 @@ export class BookmarkController {
     });
     return bookmarks;
   }
+
   @Get('/:id')
   public async getById(
     @ImUser('email') email: string,
@@ -83,6 +81,7 @@ export class BookmarkController {
       id: id,
     });
   }
+
   @Delete()
   public async delete(@ImUser('email') email: string, @Body('id') id: string) {
     console.log(email, id);

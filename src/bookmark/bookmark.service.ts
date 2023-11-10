@@ -64,7 +64,7 @@ export class BookmarkService {
       if (data.childUrlsNew[0]) {
         await this.addChildUrls(bookmark.id, data.childUrlsNew);
       }
-      const { deletedAt, createdAt, updatedAt, ...rest } = bookmark;
+      const { deletedAt, createdAt, updatedAt, alias, ...rest } = bookmark;
       console.log(rest, ' in patch');
       return rest;
     } catch (err) {
