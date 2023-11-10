@@ -19,7 +19,7 @@ export class BookmarkService {
     childUrls: string[];
     alias?: string;
   }): Promise<BookmarkDtoWithId> {
-    const aliasInput = data.alias ? data.alias : '';
+    const aliasInput = data?.alias ? data?.alias : '';
     try {
       const bookmark = await this.prismaService.bookmark.create({
         data: {
