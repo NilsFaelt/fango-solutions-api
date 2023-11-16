@@ -25,7 +25,7 @@ export class BookmarkService {
         data: {
           url: data.url,
           userEmail: data.email,
-          alias: 'aliasInput',
+          alias: aliasInput,
         },
       });
       await this.clickService.create(bookmark.id);

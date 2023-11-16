@@ -60,7 +60,6 @@ export class BookmarkController {
     @Query('skip', ParseIntPipe) skip?: number,
     @Query('limit', ParseIntPipe) limit?: number | null,
   ): Promise<BookmarkInterface[]> {
-    console.log(process.env.NODE_ENV, ' in main');
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     const bookmarks = await this.bookmarkService.get({
       email: email,
@@ -84,7 +83,6 @@ export class BookmarkController {
 
   @Delete()
   public async delete(@ImUser('email') email: string, @Body('id') id: string) {
-    console.log(email, id);
     if (!email) throw new HttpException('access denied', HttpStatus.FORBIDDEN);
     if (!id) throw new HttpException('id not found', HttpStatus.NOT_FOUND);
     return this.bookmarkService.delete(id, email);

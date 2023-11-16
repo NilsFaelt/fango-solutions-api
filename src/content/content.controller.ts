@@ -33,7 +33,6 @@ export class ContentController {
     @ImUser('email') email,
     @Query('bookmarkId') bookmarkId: string,
   ): Promise<ContentInterface[]> {
-    console.log(bookmarkId, ' in get ');
     if (!email) throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
     return this.contentService.get(email, bookmarkId);
   }
@@ -58,7 +57,6 @@ export class ContentController {
     @Param('id') id: string,
     @Body('data') data: ContentInterface,
   ): Promise<ContentInterface> {
-    console.log(id, email, data, ' in patch');
     if (!email || !id)
       throw new HttpException('access denied ', HttpStatus.FORBIDDEN);
 

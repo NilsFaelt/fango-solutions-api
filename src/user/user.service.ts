@@ -60,8 +60,6 @@ export class UserService {
           email: user.email,
         },
       });
-
-      console.log(deletedUser);
     } catch (error) {
       console.error(error);
     }

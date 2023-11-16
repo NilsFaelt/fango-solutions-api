@@ -8,7 +8,6 @@ export class ClickController {
   constructor(private readonly clickService: ClickService) {}
   @Post('increment')
   public async increment(@Body('bookmarkId') bookmarkId: string) {
-    console.log(bookmarkId, ' in controler inert click');
     return await this.clickService.increment(bookmarkId);
   }
   @Get('/:bookmarkId')
